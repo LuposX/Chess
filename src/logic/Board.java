@@ -39,7 +39,7 @@ public class Board {
 	 * @return boardArray an array which has cells in it these cells contain the pieces, cordinates, ect.
 	 */
 	public Cell[][] getBoardArray() {
-		return boardArray;
+		return this.boardArray;
 	}
 	
 	/**

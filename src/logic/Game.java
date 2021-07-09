@@ -102,7 +102,7 @@ public class Game {
 			Piece endPiece =  board.getBoardArray()[tmpCellY][tmpCellX].getPiece(); // The Piece where we end up
 			
 			// Check if the path is valid
-			if (startPiece.isValidPath(this.firstMouseClickCoordinates.x, this.firstMouseClickCoordinates.y, tmpCellX, tmpCellY, endPiece == null)) {
+			if (startPiece.isValidPath(this.firstMouseClickCoordinates.x, this.firstMouseClickCoordinates.y, tmpCellX, tmpCellY, board.getBoardArray())) {
 				
 				// Check if end cell is empty
 				if (endPiece == null) {
@@ -172,6 +172,14 @@ public class Game {
 										this.firstClickPerMoveTry = true; // Used to check if its the first mouse lick in a chess move
 										chessPannel.repaint(); // redraws the JPannel
 
+										if (this.playerTurn == player1) {
+											this.playerTurn = player2;
+											this.gui.getInfoPanel().setPlayerTurnText("It's Player 2 turn.");
+										} else {
+											this.playerTurn = player1;
+											this.gui.getInfoPanel().setPlayerTurnText("It's Player 1 turn.");
+										}
+
 									} else {
 										this.firstClickPerMoveTry = true;
 										System.out.println("IsValidMove: false3");
@@ -188,6 +196,14 @@ public class Game {
 									this.firstMouseClickCoordinates = null;
 									this.firstClickPerMoveTry = true; // Used to check if its the first mouse lick in a chess move
 									chessPannel.repaint(); // redraws the JPannel
+
+									if (this.playerTurn == player1) {
+										this.playerTurn = player2;
+										this.gui.getInfoPanel().setPlayerTurnText("It's Player 2 turn.");
+									} else {
+										this.playerTurn = player1;
+										this.gui.getInfoPanel().setPlayerTurnText("It's Player 1 turn.");
+									}
 
 								}
 							} else {

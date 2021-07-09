@@ -1,5 +1,8 @@
 package pieces;
 
+import logic.Board;
+import logic.Cell;
+
 public class Pawn extends Piece {
 	private Boolean firstMove = true;
 	private Boolean isWhite;
@@ -11,7 +14,7 @@ public class Pawn extends Piece {
 	}
 
 	@Override
-	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, boolean endPieceNull) {
+	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board) {
 		// We do -2 because y-axis starts at the top and goes down
 		if((curr_x == int_x) && ((curr_y - 2)) == int_y && (firstMove) && isWhite) {
 			this.firstMove = false;

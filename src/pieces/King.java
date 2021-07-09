@@ -1,5 +1,8 @@
 package pieces;
 
+import logic.Board;
+import logic.Cell;
+
 public class King extends Piece{
 
 	public King(Boolean isWhite) {
@@ -9,7 +12,7 @@ public class King extends Piece{
 
 
 	@Override
-	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, boolean endPieceNull) {
+	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board) {
 		if (curr_x + 1 == int_x || curr_x - 1 == int_x) {
 			return true;
 			

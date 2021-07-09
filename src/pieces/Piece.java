@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import logic.Board;
+import logic.Cell;
 import logic.Misc;
 
 /**
@@ -41,10 +43,10 @@ public abstract class Piece {
 	 * @param curr_y current y cordinate of the piece
 	 * @param int_x intented x
 	 * @param int_y intented y
-	 * @param endPieceNull is the endpiece null or is a piece standing on it
+	 * @param board is the chessBoard needed to check for thing like if a piece intercepets another
 	 * @return Bolean if the path is valid return true else false
 	 */
-	public abstract Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, boolean endPieceNull);
+	public abstract Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board);
 	
 	public Boolean getIsWhite() {
 		return this.isWhite;

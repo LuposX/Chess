@@ -1,5 +1,8 @@
 package pieces;
 
+import logic.Board;
+import logic.Cell;
+
 public class Knight extends Piece{
 
 	public Knight(Boolean isWhite) {
@@ -8,7 +11,7 @@ public class Knight extends Piece{
 	}
 
 	@Override
-	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, boolean endPieceNull) {
+	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board) {
 		
 		// Calculate difference between start and end position
 		int differenceX = (int) Math.sqrt(Math.pow((curr_x - int_x), 2));

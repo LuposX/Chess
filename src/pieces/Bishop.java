@@ -11,15 +11,59 @@ public class Bishop extends Piece{
 	}
 
 	@Override
-	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board) {
+	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] chessBoard) {
 		
 		// Calculate difference between start and end position
 		int differenceX = (int) Math.sqrt(Math.pow((curr_x - int_x), 2));
 		int differenceY = (int) Math.sqrt(Math.pow((curr_y - int_y), 2));
 		
 		if(differenceX == differenceY) {
-			return true;
-			
+
+			// Direction from source: bottom right
+			if(curr_x + differenceX == int_x && curr_y + differenceY == int_y) {
+
+				// Check if a piece is blocking the path
+				for (int i = 1; i < differenceX; i++) {
+					if (chessBoard[curr_y + i][curr_x + i].getPiece() != null) {
+						return false;
+					}
+				}
+				return true;
+
+			// Direction from source: bottom left
+			} else if (curr_x - differenceX == int_x && curr_y + differenceY == int_y) {
+
+				// Check if a piece is blocking the path
+				for (int i = 1; i < differenceX; i++) {
+					if (chessBoard[curr_y + i][curr_x - i].getPiece() != null) {
+						return false;
+					}
+				}
+				return true;
+
+			// Direction from source: top right
+			} else if (curr_x + differenceX == int_x && curr_y - differenceY == int_y) {
+
+				// Check if a piece is blocking the path
+				for (int i = 1; i < differenceX; i++) {
+					if (chessBoard[curr_y - i][curr_x + i].getPiece() != null) {
+						return false;
+					}
+				}
+				return true;
+
+			// Direction from source: top left
+			} else {
+
+				// Check if a piece is blocking the path
+				for (int i = 1; i < differenceX; i++) {
+					if (chessBoard[curr_y - i][curr_x - i].getPiece() != null) {
+						return false;
+					}
+				}
+				return true;
+
+			}
 		} else {
 			return false;
 		}

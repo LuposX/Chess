@@ -115,7 +115,7 @@ public class Game {
 
 						// Check that source piece has same color than player
 						if (startPiece.getIsWhite() == playerTurn.getIsWhiteSide()) {
-							System.out.println("IsValidMove: true1");
+							System.out.println("IsValidMove: True, normal move");
 
 							Move move = new Move(true, this.firstMouseClickCoordinates, new Point(tmpCellX, tmpCellY), startPiece); // create a new move
 							this.historyMoves.add(move);  // update the history of chess moves of the game
@@ -135,23 +135,20 @@ public class Game {
 
 						} else {
 							this.firstClickPerMoveTry = true;
-							System.out.println("IsValidMove: false1");
+							System.out.println("IsValidMove: False, wrong color piece");
 						}
 
 					}  else {
 						this.firstClickPerMoveTry = true;
-						System.out.println("IsValidMove: false2");
+						System.out.println("IsValidMove: False, Pawn cant move diagonal");
 					}
 
 				   // End cell is not empty
 				}  else {
 						this.firstClickPerMoveTry = true;
-						// capture
+						// cant capture own piece
 						if(startPiece.getIsWhite() != endPiece.getIsWhite()) {
 
-							System.out.println(endPiece);
-							System.out.println(endPiece instanceof King);
-							System.out.println(!(endPiece instanceof King));
 
 							// You cant capture the King
 							if(!(endPiece instanceof King)) {
@@ -162,7 +159,7 @@ public class Game {
 									if (!((tmpCellY  == this.firstMouseClickCoordinates.y + 1 && tmpCellX  == this.firstMouseClickCoordinates.x)
 											|| (tmpCellY == this.firstMouseClickCoordinates.y - 1 && tmpCellX  == this.firstMouseClickCoordinates.x))) {
 
-										System.out.println("IsValidMove: true2");
+										System.out.println("IsValidMove: True, Capture with Pawn");
 
 										Move move = new Move(true, this.firstMouseClickCoordinates, new Point(tmpCellX, tmpCellY), startPiece); // create a new move
 										this.historyMoves.add(move);  // update the history of chess moves of the game
@@ -182,12 +179,12 @@ public class Game {
 
 									} else {
 										this.firstClickPerMoveTry = true;
-										System.out.println("IsValidMove: false3");
+										System.out.println("IsValidMove: False, Pawns cant capture straight");
 									}
 
 								// Capture with any piece besides pawn
 								} else {
-									System.out.println("IsValidMove: Capture");
+									System.out.println("IsValidMove: True, Capture with a Piece");
 
 									Move move = new Move(true, this.firstMouseClickCoordinates, new Point(tmpCellX, tmpCellY), startPiece); // create a new move
 									this.historyMoves.add(move);  // update the history of chess moves of the game
@@ -208,19 +205,19 @@ public class Game {
 								}
 							} else {
 								this.firstClickPerMoveTry = true;
-								System.out.println("IsValidMove: false4");
+								System.out.println("IsValidMove: False, Cant capture king");
 							}
 
 						} else {
 							this.firstClickPerMoveTry = true;
-							System.out.println("IsValidMove: false5");
+							System.out.println("IsValidMove: False, Cant capture own piece");
 						}
 					
 					}
 					
 				} else {
 					this.firstClickPerMoveTry = true;
-					System.out.println("IsValidMove: false6");
+					System.out.println("IsValidMove: False, not a valid path");
 			}
 		}
 	}

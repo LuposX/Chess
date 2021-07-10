@@ -18,7 +18,6 @@ public class Rook extends Piece{
 
 		if (curr_x == int_x) {
 
-			// If its the white pieces we need to subtract to the current postition when its black we need to add to curren position
 			if(curr_y > int_y) {
 				// Check that no piece is between the path
 				for (int i = 1; i < differenceY; i++) {
@@ -38,11 +37,11 @@ public class Rook extends Piece{
 			}
 
 		} else if (curr_y == int_y) {
-			// If its the white pieces we need to subtract to the current postition when its black we need to add to curren position
+
 			if(curr_x > int_x) {
 				// Check that no piece is between the path
 				for (int i = 1; i < differenceX; i++) {
-					if (chessBoard[curr_y][curr_x - 1].getPiece() != null) {
+					if (chessBoard[curr_y][curr_x - i].getPiece() != null) {
 						return false;
 					}
 				}
@@ -50,7 +49,7 @@ public class Rook extends Piece{
 			} else {
 				// Check that no piece is between the path
 				for (int i = 1; i < differenceX; i++) {
-					if (chessBoard[curr_y][curr_x + 1].getPiece() != null) {
+					if (chessBoard[curr_y][curr_x + i].getPiece() != null) {
 						return false;
 					}
 				}

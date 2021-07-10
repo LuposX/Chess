@@ -10,7 +10,6 @@ public class King extends Piece{
 		// TODO Auto-generated constructor stub
 	}
 
-
 	@Override
 	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board) {
 		if (curr_x + 1 == int_x || curr_x - 1 == int_x) {

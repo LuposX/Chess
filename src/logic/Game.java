@@ -62,6 +62,30 @@ public class Game {
 	}
 
 	/**
+	 * Checks if the King is in Check
+	 */
+	public void checkCheck() {
+		Point kingsPos[] = new Point[2];  // in here we write the position of the kings
+		int tmpKingFound = 0;  // used to see how many kings we already found on the board
+
+		// Get the boardarray
+		Cell[][] board = this.board.getBoardArray();
+
+		// Get position of King
+		for(int i = 0; i < board.length; i++) {
+			for(int j = 0; j < board[i].length; j++) {
+				if(board[i][j].getPiece() instanceof King) {
+					kingsPos[tmpKingFound] = new Point(board[i][j].getX(), board[i][j].getY());
+					tmpKingFound++;
+				}
+			}
+		}
+
+
+
+	}
+
+	/**
 	 * Draws the chess-board and the the chess pieces on the screen
 	 * @param g Graphics in order to draw on JPannel
 	 */
@@ -193,6 +217,7 @@ public class Game {
 									this.firstMouseClickCoordinates = null;
 									this.firstClickPerMoveTry = true; // Used to check if its the first mouse lick in a chess move
 									chessPannel.repaint(); // redraws the JPannel
+
 
 									if (this.playerTurn == player1) {
 										this.playerTurn = player2;

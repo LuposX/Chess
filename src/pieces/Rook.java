@@ -13,8 +13,8 @@ public class Rook extends Piece{
 	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] chessBoard) {
 
 		// Calculate difference between start and end position
-		int differenceX = (int) Math.sqrt(Math.pow((curr_x - int_x), 2));
-		int differenceY = (int) Math.sqrt(Math.pow((curr_y - int_y), 2));
+		int differenceX = Math.abs(curr_x - int_x);
+		int differenceY = Math.abs(curr_y - int_y);
 
 		if (curr_x == int_x) {
 

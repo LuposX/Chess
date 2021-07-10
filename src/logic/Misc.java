@@ -3,6 +3,10 @@ package logic;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class Misc {
 	/**
@@ -26,7 +30,28 @@ public class Misc {
 	    g2d.dispose();
 
 	    return dimg;
-	}  
+	}
+
+	/**
+	 * Deep copies a object so that changes to the copied object doesnt chaneg the values of original object
+	 * @param object the object which should be clonsed
+	 * @return deep copy of parameter object
+	 */
+	public static Object deepCopy(Object object) {
+		try {
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			ObjectOutputStream outputStrm = new ObjectOutputStream(outputStream);
+			outputStrm.writeObject(object);
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+			ObjectInputStream objInputStream = new ObjectInputStream(inputStream);
+			return objInputStream.readObject();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	
 	/**
 	 * Used to check if an array is full/contains any null elements

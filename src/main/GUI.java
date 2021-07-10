@@ -33,7 +33,7 @@ public class GUI extends JFrame implements ActionListener{
 		this.infoPanel = new InfoPanel(this);
 		
 		// Create the ChessBoard
-		 this.chessfieldPannel = new ChessPannel(8, 8, this);
+		 this.chessfieldPannel = new ChessPannel(8, 8, this, false);
 		
 		add(chessfieldPannel);
 		add(infoPanel);

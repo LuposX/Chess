@@ -28,16 +28,18 @@ public class Game {
 	private Player playerTurn;
 	private GUI gui;
 	private boolean turnOnConsoleBoard;
+	private boolean useTestBoard;
 	
-	public Game(int boardSizeX, int boardSizeY, int tileSize, GUI gui, boolean turnOnConsoleBoard) {
+	public Game(int boardSizeX, int boardSizeY, int tileSize, GUI gui, boolean turnOnConsoleBoard, boolean useTestBoard) {
 		this.boardSizeX = boardSizeX;
 		this.boardSizeY = boardSizeY;
 		this.tileSize = tileSize;
 		this.historyMoves = new ArrayList<Move>(); 
 		this.gui = gui;
 		this.turnOnConsoleBoard = turnOnConsoleBoard;
+		this.useTestBoard = useTestBoard;
 
-		this.board = new Board(boardSizeX, boardSizeY, tileSize);
+		this.board = new Board(boardSizeX, boardSizeY, tileSize, useTestBoard);
 		this.player1 = new Player(true);
 		this.player2 = new Player(false);
 		
@@ -59,7 +61,12 @@ public class Game {
 
 		this.historyMoves.clear();
 
-		this.board.resetBoard();
+		if (this.useTestBoard) {
+			this.board.testBoard();
+		} else {
+			this.board.resetBoard();
+		}
+
 		this.gui.getChessfield().repaint();
 	}
 

@@ -23,20 +23,22 @@ public class King extends Piece{
 			boolean[] checkKing = checkCheck(board);
 			if (checkKing[0] || checkKing[1] ) {
 				System.out.println("King is in check");
-				return false;
+				this.kingIsInCheck = true;
+			} else {
+				this.kingIsInCheck = false;
 			}
 		}
 
 		if (curr_x + 1 == int_x || curr_x - 1 == int_x) {
-			return true;
+			this.isValidMoveBool = true;
 			
 		} else if (curr_y + 1 == int_y || curr_y - 1 == int_y) {
-			return true;
+			this.isValidMoveBool = true;
 
 		} else {
-			return false;
+			this.isValidMoveBool = false;
 		}
+		return checkIfMoveOutOfCheck(curr_x, curr_y, int_x, int_y, board, checkCheck, startPiece, endPiece, kingIsInCheck, isValidMoveBool);
 	}
-
 
 }

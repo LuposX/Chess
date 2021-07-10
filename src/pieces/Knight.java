@@ -23,7 +23,9 @@ public class Knight extends Piece{
 			boolean[] checkKing = checkCheck(board);
 			if (checkKing[0] || checkKing[1] ) {
 				System.out.println("King is in check");
-				return false;
+				kingIsInCheck = true;
+			} else {
+				this.kingIsInCheck = false;
 			}
 		}
 
@@ -32,13 +34,14 @@ public class Knight extends Piece{
 		int differenceY = (int) Math.sqrt(Math.pow((curr_y - int_y), 2));
 		
 		if(differenceX == 1 && differenceY == 2) {
-			return true;
+			this.isValidMoveBool = true;
 			
 		} else if (differenceX == 2 && differenceY == 1) {
-			return true;
+			this.isValidMoveBool = true;
 			
 		} else {
-			return false;
+			this.isValidMoveBool = false;
 		}
+		return checkIfMoveOutOfCheck(curr_x, curr_y, int_x, int_y, board, checkCheck, startPiece, endPiece, kingIsInCheck, isValidMoveBool);
 	}
 }

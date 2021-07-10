@@ -75,6 +75,63 @@ public abstract class Piece implements Serializable  {
 		}
 	}
 
+
+	/**
+	 * @param curr_x
+	 * @param curr_y
+	 * @param int_x
+	 * @param int_y
+	 * @param board
+	 * @param checkCheck
+	 * @param startPiece
+	 * @param endPiece
+	 * @param kingIsInCheck
+	 * @param isValidMoveBool
+	 * @return
+	 */
+	public boolean checkIfMoveOutOfCheck(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, boolean checkCheck, Piece startPiece, Piece endPiece, boolean kingIsInCheck, boolean isValidMoveBool) {
+		// When the move is valid
+		if(isValidMoveBool) {
+
+			// When checking check is turned on, Check if new move makes king out of check
+			if(checkCheck) {
+
+				// create a tmp chessboard with the new move on it in order to check if the new move moves the king out of check or blocks the check
+				if(kingIsInCheck) {
+
+					// Change the values of the copy to the intented move
+					board[int_y][int_x] = new Cell(int_y, int_x, board[curr_y][curr_x].getPiece());
+					board[curr_y][curr_x] = new Cell(curr_y, curr_x, null);
+
+					boolean[] checkKing = checkCheck(board);
+					if (checkKing[0] || checkKing[1] ) {
+						System.out.println("Move doesnt bring king out of check");
+
+						// Change the values back to the original
+						board[curr_y][curr_x] = new Cell(curr_y, curr_x, startPiece);
+						board[int_y][int_x] = new Cell(int_y, int_x, endPiece);
+
+						return false;
+					} else {
+						return true;
+					}
+
+				} else {
+					return true;
+				}
+
+				// When the move is valid and checks are turned off
+			} else {
+				return true;
+			}
+
+			// When move is no valid
+		} else {
+			return false;
+		}
+	}
+
+
 	/**
 	 * Checks if the King is in Check
 	 * @return boolean[] first entry is for white king, second entry is for black king

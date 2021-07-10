@@ -22,7 +22,9 @@ public class Rook extends Piece{
 			boolean[] checkKing = checkCheck(board);
 			if (checkKing[0] || checkKing[1] ) {
 				System.out.println("King is in check");
-				return false;
+				kingIsInCheck = true;
+			} else {
+				this.kingIsInCheck = false;
 			}
 		}
 
@@ -30,24 +32,28 @@ public class Rook extends Piece{
 		int differenceX = Math.abs(curr_x - int_x);
 		int differenceY = Math.abs(curr_y - int_y);
 
+		out:
 		if (curr_x == int_x) {
 
 			if(curr_y > int_y) {
 				// Check that no piece is between the path
 				for (int i = 1; i < differenceY; i++) {
 					if (board[curr_y - i][curr_x].getPiece() != null) {
-						return false;
+						this.isValidMoveBool = false;
+						break out;
 					}
 				}
-				return true;  // if no piece is in the way
+				this.isValidMoveBool = true;  // if no piece is in the way
+
 			} else {
 				// Check that no piece is between the path
 				for (int i = 1; i < differenceY; i++) {
 					if (board[curr_y + i][curr_x].getPiece() != null) {
-						return false;
+						this.isValidMoveBool = false;
+						break out;
 					}
 				}
-				return true;  // if no piece is in the way
+				this.isValidMoveBool = true;  // if no piece is in the way
 			}
 
 		} else if (curr_y == int_y) {
@@ -56,21 +62,25 @@ public class Rook extends Piece{
 				// Check that no piece is between the path
 				for (int i = 1; i < differenceX; i++) {
 					if (board[curr_y][curr_x - i].getPiece() != null) {
-						return false;
+						this.isValidMoveBool = false;
+						break out;
 					}
 				}
-				return true;  // if no piece is in the way
+				this.isValidMoveBool = true;  // if no piece is in the way
+
 			} else {
 				// Check that no piece is between the path
 				for (int i = 1; i < differenceX; i++) {
 					if (board[curr_y][curr_x + i].getPiece() != null) {
-						return false;
+						this.isValidMoveBool = false;
+						break out;
 					}
 				}
-				return true;  // if no piece is in the way
+				this.isValidMoveBool = true;  // if no piece is in the way
 			}
 		} else {
-			return false;
+			this.isValidMoveBool = false;
 		}
+		return checkIfMoveOutOfCheck(curr_x, curr_y, int_x, int_y, board, checkCheck, startPiece, endPiece, kingIsInCheck, isValidMoveBool);
 	}
 }

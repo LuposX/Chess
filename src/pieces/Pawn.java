@@ -60,46 +60,6 @@ public class Pawn extends Piece {
 		} else {
 			this.isValidMoveBool = false;
 		}
-
-		// When the move is valid
-		if(this.isValidMoveBool) {
-
-			// When checking check is turned on, Check if new move makes king out of check
-			if(checkCheck) {
-
-				// create a tmp chessboard with the new move on it in order to check if the new move moves the king out of check or blocks the check
-				if(this.kingIsInCheck) {
-
-					// Change the values of the copy to the intented move
-					board[int_y][int_x] = new Cell(int_y, int_x, board[curr_y][curr_x].getPiece());
-					board[curr_y][curr_x] = new Cell(curr_y, curr_x, null);
-
-					boolean[] checkKing = checkCheck(board);
-					if (checkKing[0] || checkKing[1] ) {
-						System.out.println("Move doesnt bring king out of check");
-
-						// Change the values back to the original
-						board[curr_y][curr_x] = new Cell(curr_y, curr_x, startPiece);
-						board[int_y][int_x] = new Cell(int_y, int_x, endPiece);
-
-						return false;
-					} else {
-						return true;
-					}
-
-				} else {
-					this.kingIsInCheck = false;
-					return true;
-				}
-
-			// When the move is valid and checks are turned off
-			} else {
-				return true;
-			}
-
-		// When move is no valid
-		} else {
-			return false;
-		}
+		return checkIfMoveOutOfCheck(curr_x, curr_y, int_x, int_y, board, checkCheck, startPiece, endPiece, kingIsInCheck, isValidMoveBool);
 	}
 }

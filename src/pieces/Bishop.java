@@ -22,7 +22,9 @@ public class Bishop extends Piece{
 			boolean[] checkKing = checkCheck(board);
 			if (checkKing[0] || checkKing[1] ) {
 				System.out.println("King is in check");
-				return false;
+				this.kingIsInCheck = true;
+			} else {
+				this.kingIsInCheck = false;
 			}
 		}
 
@@ -34,15 +36,17 @@ public class Bishop extends Piece{
 		if(differenceX == differenceY) {
 
 			// Direction from source: bottom right
+			out:
 			if(curr_x + differenceX == int_x && curr_y + differenceY == int_y) {
 
 				// Check if a piece is blocking the path
 				for (int i = 1; i < differenceX; i++) {
 					if (board[curr_y + i][curr_x + i].getPiece() != null) {
-						return false;
+						this.isValidMoveBool = false;
+						break out;
 					}
 				}
-				return true;
+				this.isValidMoveBool = true;
 
 			// Direction from source: bottom left
 			} else if (curr_x - differenceX == int_x && curr_y + differenceY == int_y) {
@@ -50,10 +54,11 @@ public class Bishop extends Piece{
 				// Check if a piece is blocking the path
 				for (int i = 1; i < differenceX; i++) {
 					if (board[curr_y + i][curr_x - i].getPiece() != null) {
-						return false;
+						this.isValidMoveBool = false;
+						break out;
 					}
 				}
-				return true;
+				this.isValidMoveBool = true;
 
 			// Direction from source: top right
 			} else if (curr_x + differenceX == int_x && curr_y - differenceY == int_y) {
@@ -61,10 +66,11 @@ public class Bishop extends Piece{
 				// Check if a piece is blocking the path
 				for (int i = 1; i < differenceX; i++) {
 					if (board[curr_y - i][curr_x + i].getPiece() != null) {
-						return false;
+						this.isValidMoveBool = false;
+						break out;
 					}
 				}
-				return true;
+				this.isValidMoveBool = true;
 
 			// Direction from source: top left
 			} else {
@@ -72,14 +78,16 @@ public class Bishop extends Piece{
 				// Check if a piece is blocking the path
 				for (int i = 1; i < differenceX; i++) {
 					if (board[curr_y - i][curr_x - i].getPiece() != null) {
-						return false;
+						this.isValidMoveBool = false;
+						break out;
 					}
 				}
-				return true;
+				this.isValidMoveBool = true;
 
 			}
 		} else {
-			return false;
+			this.isValidMoveBool = false;
 		}
+		return checkIfMoveOutOfCheck(curr_x, curr_y, int_x, int_y, board, checkCheck, startPiece, endPiece, this.kingIsInCheck, this.isValidMoveBool);
 	}
 }

@@ -3,6 +3,10 @@ package logic;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import pieces.*;
 
@@ -17,14 +21,19 @@ public class Board {
 	 * @param sizeX	how many the x-axis in tiles should be
 	 * @param sizeY	how many the y-axis in tiles should be
 	 */
-	public Board(int sizeX, int sizeY, int tileSize) {
+	public Board(int sizeX, int sizeY, int tileSize, boolean useTestBoard) {
 		this.boardSizeX = sizeX;
 		this.boardSizeY = sizeY;
 		this.tileSizeInPx = tileSize;
 		this.boardArray = new Cell[sizeX][sizeY];
-		
-		resetBoard();
+
+		if (useTestBoard) {
+			testBoard();
+		} else {
+			resetBoard();
+		}
 	}
+
 	/**
 	 * Update the boardArray with the new chess move.
 	 * @param move The new Move with which the boardArray should be updated
@@ -107,7 +116,22 @@ public class Board {
 			}
 		}
 	}
-	
+
+	public void testBoard() {
+		// Init remaining cells without pieces
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				boardArray[i][j] = new Cell(0, 0, null);
+			}
+		}
+
+		boardArray[6][3] = new Cell(6, 3, new Pawn(true));
+		boardArray[6][4] = new Cell(6, 4, new King(true));
+
+		boardArray[2][0] = new Cell(2, 0, new Bishop(false));
+		boardArray[2][4] = new Cell(2, 4, new Rook(false));
+	}
+
 	/*
 	 * Resets the logic Chess Board to default setting.
 	 */

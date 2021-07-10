@@ -11,61 +11,83 @@ public class Bishop extends Piece{
 	}
 
 	@Override
-	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] chessBoard) {
-		
+	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, boolean checkCheck, Piece startPiece, Piece endPiece) {
+
 		// Calculate difference between start and end position
-		int differenceX = (int) Math.sqrt(Math.pow((curr_x - int_x), 2));
-		int differenceY = (int) Math.sqrt(Math.pow((curr_y - int_y), 2));
-		
+		int differenceX = Math.abs(curr_x - int_x);
+		int differenceY = Math.abs(curr_y - int_y);
+
+		// Check if King is in check
+		if(checkCheck) {
+			boolean[] checkKing = checkCheck(board);
+			if (checkKing[0] || checkKing[1] ) {
+				System.out.println("King is in check");
+				this.kingIsInCheck = true;
+			} else {
+				this.kingIsInCheck = false;
+			}
+		}
+
+		// Pieces of same color cant capture each other
+		if(checkCaptureOwnPiece(curr_x, curr_y, int_x, int_y, board)) {
+			return false;
+		}
+
 		if(differenceX == differenceY) {
 
 			// Direction from source: bottom right
+			out:
 			if(curr_x + differenceX == int_x && curr_y + differenceY == int_y) {
 
 				// Check if a piece is blocking the path
 				for (int i = 1; i < differenceX; i++) {
-					if (chessBoard[curr_y + i][curr_x + i].getPiece() != null) {
-						return false;
+					if (board[curr_y + i][curr_x + i].getPiece() != null) {
+						this.isValidMoveBool = false;
+						break out;
 					}
 				}
-				return true;
+				this.isValidMoveBool = true;
 
 			// Direction from source: bottom left
 			} else if (curr_x - differenceX == int_x && curr_y + differenceY == int_y) {
 
 				// Check if a piece is blocking the path
 				for (int i = 1; i < differenceX; i++) {
-					if (chessBoard[curr_y + i][curr_x - i].getPiece() != null) {
-						return false;
+					if (board[curr_y + i][curr_x - i].getPiece() != null) {
+						this.isValidMoveBool = false;
+						break out;
 					}
 				}
-				return true;
+				this.isValidMoveBool = true;
 
 			// Direction from source: top right
 			} else if (curr_x + differenceX == int_x && curr_y - differenceY == int_y) {
 
 				// Check if a piece is blocking the path
 				for (int i = 1; i < differenceX; i++) {
-					if (chessBoard[curr_y - i][curr_x + i].getPiece() != null) {
-						return false;
+					if (board[curr_y - i][curr_x + i].getPiece() != null) {
+						this.isValidMoveBool = false;
+						break out;
 					}
 				}
-				return true;
+				this.isValidMoveBool = true;
 
 			// Direction from source: top left
 			} else {
 
 				// Check if a piece is blocking the path
 				for (int i = 1; i < differenceX; i++) {
-					if (chessBoard[curr_y - i][curr_x - i].getPiece() != null) {
-						return false;
+					if (board[curr_y - i][curr_x - i].getPiece() != null) {
+						this.isValidMoveBool = false;
+						break out;
 					}
 				}
-				return true;
+				this.isValidMoveBool = true;
 
 			}
 		} else {
-			return false;
+			this.isValidMoveBool = false;
 		}
+		return checkIfMoveOutOfCheck(curr_x, curr_y, int_x, int_y, board, checkCheck, startPiece, endPiece, this.kingIsInCheck, this.isValidMoveBool);
 	}
 }

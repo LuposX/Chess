@@ -2,7 +2,9 @@ package logic;
 
 import pieces.Piece;
 
-public class Cell {
+import java.io.*;
+
+public class Cell implements Serializable {
 	private Piece piece;
 	private int Y;
 	private int X;

@@ -34,7 +34,7 @@ public class ChessPannel extends JPanel implements MouseListener{
 	 * @param size_X  How big the Panel is
 	 * @param size_Y  How big the Panel is
 	 */
-	public ChessPannel(int size_X, int size_Y, GUI gui) {
+	public ChessPannel(int size_X, int size_Y, GUI gui, boolean turnOnConsoleBoard) {
 		this.gui = gui;
 		this.renderImageBool = false;
 		this.size_X = size_X;
@@ -43,7 +43,7 @@ public class ChessPannel extends JPanel implements MouseListener{
 		// "Turns on" mouse listener
 		this.addMouseListener(this);
 		
-		this.game = new Game(boardSizeX, boardSizeY, this.tileSize, gui); // Init the game
+		this.game = new Game(boardSizeX, boardSizeY, this.tileSize, gui, turnOnConsoleBoard, true); // Init the game
 		
 	    setBorder(BorderFactory.createLineBorder(Color.black));
 	}

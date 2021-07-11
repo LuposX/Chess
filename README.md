@@ -24,4 +24,4 @@
 
 Distributed under the MIT license. See ``LICENSE`` for more information.
 
-[LICENSE Digit-Recognition](https://github.com/LuposX/Chess/LICENSE)
+[LICENSE](https://github.com/LuposX/Chess/blob/dev/LICENSE)

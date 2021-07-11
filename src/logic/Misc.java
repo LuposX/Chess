@@ -299,6 +299,32 @@ public class Misc {
 
 
 	/**
+	 * Needs to be called in every child class in the methio is move valid. Used in the piece class
+	 * @param board the chess board
+	 * @return
+	 */
+	public static Boolean getCheckCheck(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, Piece startPiece, Piece endPiece) {
+
+		// tmp change the board to the intended move
+		board[int_y][int_x] = new Cell(int_y, int_x, board[curr_y][curr_x].getPiece());
+		board[curr_y][curr_x] = new Cell(curr_y, curr_x, null);
+
+		// Check if King is in check
+		boolean[] checkKing = Misc.checkCheck(board);
+
+		// tmp change the board back to the original
+		board[curr_y][curr_x] = new Cell(curr_y, curr_x, board[int_y][int_x].getPiece());
+		board[int_y][int_x] = new Cell(int_y, int_x,null);
+
+		if (checkKing[0] || checkKing[1] ) {
+			System.out.println("King is in check");
+			return true;
+		} else {
+			return  false;
+		}
+	}
+
+	/**
 	 * Needs to be called in every child class in the methio is move valid
 	 * @param board the chess board
 	 * @return

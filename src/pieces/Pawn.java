@@ -22,7 +22,7 @@ public class Pawn extends Piece {
 
 		// Check if King is in check and in checkMate
 		if(checkCheck) {
-			this.kingIsInCheck = Misc.getCheckCheck(board);
+			this.kingIsInCheck = Misc.getCheckCheck(curr_x, curr_y, int_x, int_y, board, startPiece, endPiece);
 		}
 
 		// We do -2 because y-axis starts at the top and goes down

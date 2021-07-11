@@ -29,6 +29,8 @@ public class Game {
 	private boolean turnOnConsoleBoard;
 	private boolean useTestBoard;
 	private boolean inCheckMate;
+	private Color c1;
+	private Color c2;
 
 	public Game(int boardSizeX, int boardSizeY, int tileSize, GUI gui, boolean turnOnConsoleBoard, boolean useTestBoard) {
 		this.boardSizeX = boardSizeX;
@@ -43,13 +45,22 @@ public class Game {
 		this.board = new Board(boardSizeX, boardSizeY, tileSize, useTestBoard);
 		this.player1 = new Player(true);
 		this.player2 = new Player(false);
-		
+
+		// the color of the chess field
+		this.c1 = new Color(254,206,159,255);
+		this.c2 = new Color(209,138,70,255);
+
 		// Init whos turn it is
 		if(this.player1.getIsWhiteSide() == true) {
 			this.playerTurn = this.player1;
 		} else {
 			this.playerTurn = this.player2;
 		}
+	}
+
+	public void setChessFieldColorScheme(Color c1, Color c2) {
+		this.c1 = c1;
+		this.c2 = c2;
 	}
 
 	public void newGame() {
@@ -69,6 +80,8 @@ public class Game {
 			this.board.resetBoard();
 		}
 
+		this.gui.getInfoPanel().setPlayerTurnText("It's White turn.");
+
 		this.gui.getChessfield().repaint();
 	}
 
@@ -78,7 +91,7 @@ public class Game {
 	 * @param g Graphics in order to draw on JPannel
 	 */
 	public void render(Graphics g) {
-		this.board.drawChessBoard(g);
+		this.board.drawChessBoard(g, c1, c2);
 		this.board.drawPieces(g);
 
 		if(this.inCheckMate) {

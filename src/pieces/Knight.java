@@ -20,7 +20,7 @@ public class Knight extends Piece{
 
 		// Check if King is in check and in checkMate
 		if(checkCheck) {
-			this.kingIsInCheck = Misc.getCheckCheck(board);
+			this.kingIsInCheck = Misc.getCheckCheck(curr_x, curr_y, int_x, int_y, board, startPiece, endPiece);
 		}
 
 		// Calculate difference between start and end position

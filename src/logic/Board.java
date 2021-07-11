@@ -103,14 +103,14 @@ public class Board {
 	 * @param g2 green part of rgba of chess color 2
 	 * @param b2 blue part of rgba of chess color 2
 	 */
-	public void drawChessBoard(Graphics g, int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2){
+	public void drawChessBoard(Graphics g, Color c1, Color c2){
 		for (int a = 0; a < this.boardSizeY; a++) {
 			for (int b = 0; b <this.boardSizeY; b++) {
 				if((a + b) % 2 == 0){
-					 g.setColor(new Color(r1, g1, b1, a1));
+					 g.setColor(c1);
 				     g.fillRect(0 + b * this.tileSizeInPx, 0 + a * this.tileSizeInPx, this.tileSizeInPx, this.tileSizeInPx);
 				} else {
-					g.setColor(new Color(r2, g2, b2, a2));
+					g.setColor(c2);
 				     g.fillRect(0 + b * this.tileSizeInPx, 0 + a * this.tileSizeInPx, this.tileSizeInPx, this.tileSizeInPx);
 				}
 			}

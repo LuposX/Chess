@@ -1,12 +1,12 @@
 package logic;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import pieces.*;
 
@@ -96,21 +96,17 @@ public class Board {
 	
 	/**
 	 * Draws a Chess Board.
-	 * @param r1 red part of rgba of chess color 1
-	 * @param g1 green part of rgba of chess color 1
-	 * @param b1 blue part of rgba of chess color 1
-	 * @param r2 red part of rgba of chess color 2
-	 * @param g2 green part of rgba of chess color 2
-	 * @param b2 blue part of rgba of chess color 2
+	 * @param c1 color 1
+	 * @param c2 color 2
 	 */
-	public void drawChessBoard(Graphics g, int r1, int g1, int b1, int a1, int r2, int g2, int b2, int a2){
+	public void drawChessBoard(Graphics g, Color c1, Color c2){
 		for (int a = 0; a < this.boardSizeY; a++) {
 			for (int b = 0; b <this.boardSizeY; b++) {
 				if((a + b) % 2 == 0){
-					 g.setColor(new Color(r1, g1, b1, a1));
+					 g.setColor(c1);
 				     g.fillRect(0 + b * this.tileSizeInPx, 0 + a * this.tileSizeInPx, this.tileSizeInPx, this.tileSizeInPx);
 				} else {
-					g.setColor(new Color(r2, g2, b2, a2));
+					g.setColor(c2);
 				     g.fillRect(0 + b * this.tileSizeInPx, 0 + a * this.tileSizeInPx, this.tileSizeInPx, this.tileSizeInPx);
 				}
 			}
@@ -125,12 +121,13 @@ public class Board {
 			}
 		}
 
-		boardArray[6][3] = new Cell(6, 3, new Pawn(true));
-		boardArray[6][4] = new Cell(6, 4, new King(true));
+		boardArray[4][3] = new Cell(4, 3, new Pawn(true));
+		boardArray[7][4] = new Cell(7, 4, new King(true));
 
-		boardArray[2][0] = new Cell(2, 0, new Bishop(false));
-		boardArray[2][4] = new Cell(2, 4, new Rook(false));
+		boardArray[4][7] = new Cell(4, 7, new Rook(false));
+		boardArray[5][6] = new Cell(5, 6, new Rook(false));
 	}
+
 
 	/*
 	 * Resets the logic Chess Board to default setting.

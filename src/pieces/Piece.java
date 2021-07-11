@@ -4,17 +4,16 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import logic.Board;
-import logic.Cell;
-import logic.Misc;
+import logic.*;
 
 /**
  * 
  */
-public abstract class Piece implements Serializable  {
+public abstract class Piece {
 	protected Boolean isWhite;
 	private BufferedImage img;
 	private String imagePath;
@@ -40,7 +39,7 @@ public abstract class Piece implements Serializable  {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param curr_x current x cordinate of the piece
@@ -51,7 +50,7 @@ public abstract class Piece implements Serializable  {
 	 * @param checkCheck if true the method check if the king is in check if false method does not check if king is in check
 	 * @return Bolean if the path is valid return true else false
 	 */
-	public abstract Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, boolean checkCheck, Piece startPiece, Piece endPiece);
+	public abstract Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, boolean checkCheck, Piece startPiece, Piece endPiece, Player playerTurn);
 
 
 	/**
@@ -64,7 +63,7 @@ public abstract class Piece implements Serializable  {
 	 * @return Bolean returns true when you try to capture your own piece
 	 */
 	public boolean checkCaptureOwnPiece(int curr_x, int curr_y, int int_x, int int_y, Cell[][] chessBoard) {
-		if (chessBoard[int_y][int_x].getPiece() != null) {
+		if (chessBoard[curr_y][curr_x].getPiece() != null && chessBoard[int_y][int_x].getPiece() != null) {
 			if (chessBoard[curr_y][curr_x].getPiece().getIsWhite() == chessBoard[int_y][int_x].getPiece().getIsWhite()) {
 				return true;
 			} else {
@@ -89,7 +88,7 @@ public abstract class Piece implements Serializable  {
 	 * @param isValidMoveBool
 	 * @return
 	 */
-	public boolean checkIfMoveOutOfCheck(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, boolean checkCheck, Piece startPiece, Piece endPiece, boolean kingIsInCheck, boolean isValidMoveBool) {
+	public boolean checkIfMoveOutOfCheck(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, boolean checkCheck, Piece startPiece, Piece endPiece, boolean kingIsInCheck, boolean isValidMoveBool, Player playerTurn) {
 		// When the move is valid
 		if(isValidMoveBool) {
 
@@ -103,7 +102,7 @@ public abstract class Piece implements Serializable  {
 					board[int_y][int_x] = new Cell(int_y, int_x, board[curr_y][curr_x].getPiece());
 					board[curr_y][curr_x] = new Cell(curr_y, curr_x, null);
 
-					boolean[] checkKing = checkCheck(board);
+					boolean[] checkKing = Misc.checkCheck(board, playerTurn);
 					if (checkKing[0] || checkKing[1] ) {
 						System.out.println("Move doesnt bring king out of check");
 
@@ -131,75 +130,6 @@ public abstract class Piece implements Serializable  {
 		}
 	}
 
-
-	/**
-	 * Checks if the King is in Check
-	 * @return boolean[] first entry is for white king, second entry is for black king
-	 */
-	public boolean[] checkCheck(Cell[][] board) {
-		// in here we write the position of the kings
-		Point whiteKingsPos = new Point();
-		Point blackKingsPos = new Point();
-
-		boolean[] kingInCheck = new boolean[2];
-
-		// Get position of King
-		for(int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
-
-				// Check that the piece is a king
-				if (board[i][j].getPiece() instanceof King) {
-
-					// Check which color the king piece has
-					if(board[i][j].getPiece().getIsWhite()) {
-						whiteKingsPos = new Point(board[i][j].getX(), board[i][j].getY());
-					} else {
-						blackKingsPos = new Point(board[i][j].getX(), board[i][j].getY());
-					}
-				}
-			}
-		}
-
-		// Check if any piece can move to the king field
-		outerloop:
-		for(int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
-
-				if (board[i][j].getPiece() != null) {
-
-					Piece startPiece = board[i][j].getPiece(); // The Piece from where we start
-					Piece endPiece = board[whiteKingsPos.y][whiteKingsPos.x].getPiece(); // The Piece where we end up
-
-					kingInCheck[0] = board[i][j].getPiece().isValidPath(board[i][j].getX(), board[i][j].getY(), whiteKingsPos.x, whiteKingsPos.y, board, false, startPiece, endPiece);
-
-					if (kingInCheck[0]) {
-						break outerloop;
-					}
-				}
-			}
-		}
-
-		// Check if any piece can move to the king field
-		outerloop:
-		for(int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
-
-				if (board[i][j].getPiece() != null) {
-
-					Piece startPiece = board[i][j].getPiece(); // The Piece from where we start
-					Piece endPiece = board[blackKingsPos.y][blackKingsPos.x].getPiece(); // The Piece where we end up
-
-					kingInCheck[1] = board[i][j].getPiece().isValidPath(board[i][j].getX(), board[i][j].getY(), blackKingsPos.x, blackKingsPos.y, board, false, startPiece, endPiece);
-
-					if (kingInCheck[1]) {
-						break outerloop;
-					}
-				}
-			}
-		}
-
-		return kingInCheck;
-	}
 
 	public Boolean getIsWhite() {
 		return this.isWhite;

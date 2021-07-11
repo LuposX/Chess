@@ -1,7 +1,6 @@
 package logic;
 
-import java.awt.Graphics;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
@@ -12,8 +11,6 @@ import pieces.Pawn;
 import pieces.King;
 import pieces.Piece;
 import render.ASCIChess;
-import render.ChessPannel;
-import render.InfoPanel;
 
 public class Game {
 	private Board board;
@@ -23,13 +20,16 @@ public class Game {
 	private ArrayList<Move> historyMoves; // Used so save the coordinates of where the user clicked, used for making a move with a piece
 	private Boolean firstClickPerMoveTry = true;
 	private Point firstMouseClickCoordinates;
-	private Player player1;
-	private Player player2;
+	private Player playerWhite;
+	private Player playerBlack;
 	private Player playerTurn;
 	private GUI gui;
 	private boolean turnOnConsoleBoard;
 	private boolean useTestBoard;
-	
+	private boolean inCheckMate;
+	private Color c1;
+	private Color c2;
+
 	public Game(int boardSizeX, int boardSizeY, int tileSize, GUI gui, boolean turnOnConsoleBoard, boolean useTestBoard) {
 		this.boardSizeX = boardSizeX;
 		this.boardSizeY = boardSizeY;
@@ -38,27 +38,48 @@ public class Game {
 		this.gui = gui;
 		this.turnOnConsoleBoard = turnOnConsoleBoard;
 		this.useTestBoard = useTestBoard;
+		this.inCheckMate = false;
 
 		this.board = new Board(boardSizeX, boardSizeY, tileSize, useTestBoard);
-		this.player1 = new Player(true);
-		this.player2 = new Player(false);
-		
+		this.playerWhite = new Player(true);
+		this.playerBlack = new Player(false);
+
+		// the color of the chess field
+		this.c1 = new Color(254,206,159,255);
+		this.c2 = new Color(209,138,70,255);
+
 		// Init whos turn it is
-		if(this.player1.getIsWhiteSide() == true) {
-			this.playerTurn = this.player1;
+		if(this.playerWhite.getIsWhiteSide() == true) {
+			this.playerTurn = this.playerWhite;
 		} else {
-			this.playerTurn = this.player2;
+			this.playerTurn = this.playerBlack;
+		}
+	}
+
+	public void setChessFieldColorScheme(Color c1, Color c2) {
+		this.c1 = c1;
+		this.c2 = c2;
+	}
+
+	public void setUseTestBoard(boolean useTestBoard) {
+		this.useTestBoard = useTestBoard;
+
+		if(useTestBoard) {
+			this.board.testBoard();
+		} else {
+			this.board.resetBoard();
 		}
 	}
 
 	public void newGame() {
 		// Init whos turn it is
-		if(this.player1.getIsWhiteSide() == true) {
-			this.playerTurn = this.player1;
+		if(this.playerWhite.getIsWhiteSide() == true) {
+			this.playerTurn = this.playerWhite;
 		} else {
-			this.playerTurn = this.player2;
+			this.playerTurn = this.playerBlack;
 		}
 
+		this.inCheckMate = false;
 		this.historyMoves.clear();
 
 		if (this.useTestBoard) {
@@ -66,6 +87,8 @@ public class Game {
 		} else {
 			this.board.resetBoard();
 		}
+
+		this.gui.getInfoPanel().setPlayerTurnText("It's White turn.");
 
 		this.gui.getChessfield().repaint();
 	}
@@ -76,8 +99,14 @@ public class Game {
 	 * @param g Graphics in order to draw on JPannel
 	 */
 	public void render(Graphics g) {
-		this.board.drawChessBoard(g);
+		this.board.drawChessBoard(g, c1, c2);
 		this.board.drawPieces(g);
+
+		if(this.inCheckMate) {
+			g.setColor(Color.BLUE);
+			g.setFont(new Font("TimesRoman", Font.BOLD, 60));
+			g.drawString("CHECKMATE", 150, 200);
+		}
 	}
 	
 	 /*
@@ -113,66 +142,20 @@ public class Game {
 			Piece endPiece = board.getBoardArray()[tmpCellY][tmpCellX].getPiece(); // The Piece where we end up
 
 			// Check if the path is valid
-			if (startPiece.isValidPath(this.firstMouseClickCoordinates.x, this.firstMouseClickCoordinates.y, tmpCellX, tmpCellY, board.getBoardArray(), true, startPiece, endPiece)) {
+			if(startPiece != null) {
+				if (startPiece.isValidPath(this.firstMouseClickCoordinates.x, this.firstMouseClickCoordinates.y, tmpCellX, tmpCellY, board.getBoardArray(), true, startPiece, endPiece, this.playerTurn)) {
 
-				// Check if end cell is empty
-				if (endPiece == null) {
+					// Check if end cell is empty
+					if (endPiece == null) {
 
-					// Check that pawn doesnt move wrong
-					if (!(startPiece instanceof Pawn &&
-							(((this.firstMouseClickCoordinates.x + 1 == tmpCellX || this.firstMouseClickCoordinates.x - 1 == tmpCellX) && this.firstMouseClickCoordinates.y - 1 == tmpCellY)
-									|| (this.firstMouseClickCoordinates.x + 1 == tmpCellX || this.firstMouseClickCoordinates.x - 1 == tmpCellX) && this.firstMouseClickCoordinates.y + 1 == tmpCellY))) {
+						// Check that pawn doesnt move wrong
+						if (!(startPiece instanceof Pawn &&
+								(((this.firstMouseClickCoordinates.x + 1 == tmpCellX || this.firstMouseClickCoordinates.x - 1 == tmpCellX) && this.firstMouseClickCoordinates.y - 1 == tmpCellY)
+										|| (this.firstMouseClickCoordinates.x + 1 == tmpCellX || this.firstMouseClickCoordinates.x - 1 == tmpCellX) && this.firstMouseClickCoordinates.y + 1 == tmpCellY))) {
 
-						// Check that source piece has same color than player
-						if (startPiece.getIsWhite() == playerTurn.getIsWhiteSide()) {
-							System.out.println("IsValidMove: True, normal move");
-							System.out.println("");
-
-							Move move = new Move(true, this.firstMouseClickCoordinates, new Point(tmpCellX, tmpCellY), startPiece); // create a new move
-							this.historyMoves.add(move);  // update the history of chess moves of the game
-							board.updateBoard(move);  // update the board array
-							this.firstMouseClickCoordinates = null;
-							this.firstClickPerMoveTry = true; // Used to check if its the first mouse lick in a chess move
-							chessPannel.repaint(); // redraws the JPannel
-
-							if (turnOnConsoleBoard) {
-								ASCIChess.drawConsoleChess(board.getBoardArray());  // draws the board in the console
-							}
-
-							if (this.playerTurn == player1) {
-								this.playerTurn = player2;
-								this.gui.getInfoPanel().setPlayerTurnText("It's Player 2 turn.");
-							} else {
-								this.playerTurn = player1;
-								this.gui.getInfoPanel().setPlayerTurnText("It's Player 1 turn.");
-							}
-
-						} else {
-							this.firstClickPerMoveTry = true;
-							System.out.println("IsValidMove: False, wrong color piece");
-							System.out.println("");
-						}
-
-					} else {
-						this.firstClickPerMoveTry = true;
-						System.out.println("IsValidMove: False, Pawn cant move diagonal");
-						System.out.println("");
-					}
-
-					// End cell is not empty
-				} else {
-					this.firstClickPerMoveTry = true;
-
-					// You cant capture the King
-					if (!(endPiece instanceof King)) {
-						// Pawn are only allowed to capture diagonal
-						if (startPiece instanceof Pawn) {
-
-							// Check that the pawn doesnt move straight forward not allowed
-							if (!((tmpCellY == this.firstMouseClickCoordinates.y + 1 && tmpCellX == this.firstMouseClickCoordinates.x)
-									|| (tmpCellY == this.firstMouseClickCoordinates.y - 1 && tmpCellX == this.firstMouseClickCoordinates.x))) {
-
-								System.out.println("IsValidMove: True, Capture with Pawn");
+							// Check that source piece has same color than player
+							if (startPiece.getIsWhite() == playerTurn.getIsWhiteSide()) {
+								System.out.println("IsValidMove: True, normal move");
 								System.out.println("");
 
 								Move move = new Move(true, this.firstMouseClickCoordinates, new Point(tmpCellX, tmpCellY), startPiece); // create a new move
@@ -186,57 +169,133 @@ public class Game {
 									ASCIChess.drawConsoleChess(board.getBoardArray());  // draws the board in the console
 								}
 
-								if (this.playerTurn == player1) {
-									this.playerTurn = player2;
-									this.gui.getInfoPanel().setPlayerTurnText("It's Player 2 turn.");
+								if (this.playerTurn == playerWhite) {
+									this.playerTurn = playerBlack;
+									this.gui.getInfoPanel().setPlayerTurnText("It's Black turn.");
 								} else {
-									this.playerTurn = player1;
-									this.gui.getInfoPanel().setPlayerTurnText("It's Player 1 turn.");
+									this.playerTurn = playerWhite;
+									this.gui.getInfoPanel().setPlayerTurnText("It's White turn.");
+								}
+
+								// Check if in Checkmate
+								boolean kingIsInCheck = Misc.getCheckCheck(board.getBoardArray(), playerTurn);
+								if (kingIsInCheck) {
+									if (Misc.checkCheckMate(board.getBoardArray(), playerTurn)) {
+										System.out.println("In Checkmate");
+										this.inCheckMate = true;
+									}
 								}
 
 							} else {
 								this.firstClickPerMoveTry = true;
-								System.out.println("IsValidMove: False, Pawns cant capture straight");
+								System.out.println("IsValidMove: False, wrong color piece");
 								System.out.println("");
 							}
 
-							// Capture with any piece besides pawn
 						} else {
-							System.out.println("IsValidMove: True, Capture with a Piece");
+							this.firstClickPerMoveTry = true;
+							System.out.println("IsValidMove: False, Pawn cant move diagonal");
 							System.out.println("");
-
-							Move move = new Move(true, this.firstMouseClickCoordinates, new Point(tmpCellX, tmpCellY), startPiece); // create a new move
-							this.historyMoves.add(move);  // update the history of chess moves of the game
-							board.updateBoard(move);  // update the board array
-							this.firstMouseClickCoordinates = null;
-							this.firstClickPerMoveTry = true; // Used to check if its the first mouse lick in a chess move
-							chessPannel.repaint(); // redraws the JPannel
-
-							if (turnOnConsoleBoard) {
-								ASCIChess.drawConsoleChess(board.getBoardArray());  // draws the board in the console
-							}
-
-
-							if (this.playerTurn == player1) {
-								this.playerTurn = player2;
-								this.gui.getInfoPanel().setPlayerTurnText("It's Player 2 turn.");
-							} else {
-								this.playerTurn = player1;
-								this.gui.getInfoPanel().setPlayerTurnText("It's Player 1 turn.");
-							}
-
 						}
+
+						// End cell is not empty
 					} else {
 						this.firstClickPerMoveTry = true;
-						System.out.println("IsValidMove: False, Cant capture king");
-						System.out.println("");
-					}
-				}
 
-			} else {
-				this.firstClickPerMoveTry = true;
-				System.out.println("IsValidMove: False, not a valid path");
-				System.out.println("");
+						// You cant capture the King
+						if (!(endPiece instanceof King)) {
+							// Pawn are only allowed to capture diagonal
+							if (startPiece instanceof Pawn) {
+
+								// Check that the pawn doesnt move straight forward not allowed
+								if (!((tmpCellY == this.firstMouseClickCoordinates.y + 1 && tmpCellX == this.firstMouseClickCoordinates.x)
+										|| (tmpCellY == this.firstMouseClickCoordinates.y - 1 && tmpCellX == this.firstMouseClickCoordinates.x))) {
+
+									System.out.println("IsValidMove: True, Capture with Pawn");
+									System.out.println("");
+
+									Move move = new Move(true, this.firstMouseClickCoordinates, new Point(tmpCellX, tmpCellY), startPiece); // create a new move
+									this.historyMoves.add(move);  // update the history of chess moves of the game
+									board.updateBoard(move);  // update the board array
+									this.firstMouseClickCoordinates = null;
+									this.firstClickPerMoveTry = true; // Used to check if its the first mouse lick in a chess move
+									chessPannel.repaint(); // redraws the JPannel
+
+									if (turnOnConsoleBoard) {
+										ASCIChess.drawConsoleChess(board.getBoardArray());  // draws the board in the console
+									}
+
+									if (this.playerTurn == playerWhite) {
+										this.playerTurn = playerBlack;
+										this.gui.getInfoPanel().setPlayerTurnText("It's Black turn.");
+									} else {
+										this.playerTurn = playerWhite;
+										this.gui.getInfoPanel().setPlayerTurnText("It's White turn.");
+									}
+
+									// Check if in Checkmate
+									boolean kingIsInCheck = Misc.getCheckCheck(board.getBoardArray(), playerTurn);
+									if (kingIsInCheck) {
+										if (Misc.checkCheckMate(board.getBoardArray(), playerTurn)) {
+											System.out.println("In Checkmate");
+											this.inCheckMate = true;
+										}
+									}
+
+
+								} else {
+									this.firstClickPerMoveTry = true;
+									System.out.println("IsValidMove: False, Pawns cant capture straight");
+									System.out.println("");
+								}
+
+								// Capture with any piece besides pawn
+							} else {
+								System.out.println("IsValidMove: True, Capture with a Piece");
+								System.out.println("");
+
+								Move move = new Move(true, this.firstMouseClickCoordinates, new Point(tmpCellX, tmpCellY), startPiece); // create a new move
+								this.historyMoves.add(move);  // update the history of chess moves of the game
+								board.updateBoard(move);  // update the board array
+								this.firstMouseClickCoordinates = null;
+								this.firstClickPerMoveTry = true; // Used to check if its the first mouse lick in a chess move
+								chessPannel.repaint(); // redraws the JPannel
+
+								if (turnOnConsoleBoard) {
+									ASCIChess.drawConsoleChess(board.getBoardArray());  // draws the board in the console
+								}
+
+								// update the text in the infopanel
+								if (this.playerTurn == playerWhite) {
+									this.playerTurn = playerBlack;
+									this.gui.getInfoPanel().setPlayerTurnText("It's Black turn.");
+								} else {
+									this.playerTurn = playerWhite;
+									this.gui.getInfoPanel().setPlayerTurnText("It's White turn.");
+								}
+
+								// Check if in Checkmate
+								boolean kingIsInCheck = Misc.getCheckCheck(board.getBoardArray(), playerTurn);
+								if (kingIsInCheck) {
+									if (Misc.checkCheckMate(board.getBoardArray(), playerTurn)) {
+										System.out.println("In Checkmate");
+										this.inCheckMate = true;
+									}
+								}
+
+							}
+						} else {
+							this.firstClickPerMoveTry = true;
+							System.out.println("IsValidMove: False, Cant capture king");
+							System.out.println("");
+						}
+					}
+
+				} else {
+					this.firstClickPerMoveTry = true;
+					System.out.println("IsValidMove: False, not a valid path");
+					System.out.println("");
+				}
 			}
 		}
 	}

@@ -2,38 +2,68 @@ package render;
 
 import main.GUI;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class InfoPanel extends JPanel implements ActionListener{
+public class InfoPanel extends JPanel implements ActionListener, ItemListener {
 	public JLabel playerTurnLabel;
 	private JButton newGame;
 	private GUI gui;
+	private Choice choiceColor;
+	private Choice choiceScenario;
+	private JLabel labelScenario;
+	private JLabel labelColor;
 
 	public InfoPanel(GUI gui) {
 		this.gui = gui;
-		setLayout(new GridLayout(4, 1));
+
+		GridLayout gridlayout = new GridLayout(6, 1);
+		gridlayout.setHgap(200);
+		setLayout(gridlayout);
 		setBorder(BorderFactory.createLineBorder(Color.black));
-		setMaximumSize(new Dimension(400, 400));
+		//setMaximumSize(new Dimension(400, 400));
 		
 		this.newGame = new JButton("New Game");
 		this.newGame.addActionListener(this);
-		this.newGame.setPreferredSize(new Dimension(200, 80));
+		//this.newGame.setPreferredSize(new Dimension(200, 80));
 		this.newGame.setFont(new Font("Calibri", Font.BOLD, 20));
 
-		this.playerTurnLabel = new JLabel("It's Player 1 turn.");
+		this.playerTurnLabel = new JLabel("It's White turn.");
 		this.playerTurnLabel.setFont(new Font("Calibri", Font.BOLD, 30));
-		
+
+		this.choiceColor = new Choice();
+		//this.choiceColor.setPreferredSize(new Dimension(200, 100));
+		this.choiceColor.add("Default");
+		this.choiceColor.add("Green");
+		this.choiceColor.add("Dark Wood");
+		this.choiceColor.add("Icy Sea");
+		this.choiceColor.add("Orange");
+		this.choiceColor.add("Tournemant");
+		this.choiceColor.addItemListener(this);
+
+		this.choiceScenario = new Choice();
+		this.choiceScenario.add("Default");
+		this.choiceScenario.add("2 Rooks and 1 King");
+		this.choiceScenario.addItemListener(this);
+
+		this.labelScenario = new JLabel("Different Chess Scenarios: ");
+		this.labelScenario.setFont(new Font("Calibri", Font.BOLD, 20));
+
+		this.labelColor = new JLabel("Different Color Schemes: ");
+		this.labelColor.setFont(new Font("Calibri", Font.BOLD, 20));
+
+		add(this.labelScenario);
+		add(this.choiceScenario);
+		add(this.labelColor);
+		add(this.choiceColor);
 		add(this.newGame);
 		add(this.playerTurnLabel);
 		
@@ -50,10 +80,59 @@ public class InfoPanel extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(e.getSource());
-		if(e.getSource() == newGame) {
+		if(e.getSource() == this.newGame) {
+			System.out.println("Game reset");
 			this.gui.getChessfield().getGame().newGame();
+
 		}
 	}
-	
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		if(e.getSource() == this.choiceColor) {
+			int tmpIndex = this.choiceColor.getSelectedIndex();
+			System.out.println("Chosen Color Scheme: " + this.choiceColor.getSelectedItem());
+
+			if(tmpIndex == 0) {
+				this.gui.getChessfield().getGame().setChessFieldColorScheme(new Color(254,206,159,255), new Color(209,138,70,255));
+				this.gui.getChessfield().repaint();
+
+			} else if(tmpIndex == 1) {
+				this.gui.getChessfield().getGame().setChessFieldColorScheme(new Color(239,239,210,255), new Color(119,151,86,255));
+				this.gui.getChessfield().repaint();
+
+			} else if(tmpIndex == 2) {
+				this.gui.getChessfield().getGame().setChessFieldColorScheme(new Color(199,159,110,255), new Color(136,95,65,255));
+				this.gui.getChessfield().repaint();
+
+			} else if(tmpIndex == 3) {
+				this.gui.getChessfield().getGame().setChessFieldColorScheme(new Color(212,225,228,255), new Color(121,157,176,255));
+				this.gui.getChessfield().repaint();
+
+			} else if(tmpIndex == 4) {
+				this.gui.getChessfield().getGame().setChessFieldColorScheme( new Color(253,228,179,255), new Color(208,138,25,255));
+				this.gui.getChessfield().repaint();
+
+			} else if(tmpIndex == 5) {
+				this.gui.getChessfield().getGame().setChessFieldColorScheme(new Color(226,227,220,255), new Color(49,103,72,255));
+				this.gui.getChessfield().repaint();
+
+			}
+
+		} else if(e.getSource() == this.choiceScenario) {
+			int tmpIndex = this.choiceScenario.getSelectedIndex();
+			System.out.println("Chosen Scenario: " + this.choiceScenario.getSelectedItem());
+
+			if(tmpIndex == 0) {
+				this.gui.getChessfield().getGame().setUseTestBoard(false);
+				this.gui.getChessfield().repaint();
+
+			} else if(tmpIndex == 1) {
+				this.gui.getChessfield().getGame().setUseTestBoard(true);
+				this.gui.getChessfield().repaint();
+
+			}
+
+		}
+	}
 }

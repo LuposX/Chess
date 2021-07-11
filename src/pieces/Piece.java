@@ -8,10 +8,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import logic.Board;
-import logic.Cell;
-import logic.Misc;
-import logic.possibleKingCheckSpots;
+import logic.*;
 
 /**
  * 
@@ -53,7 +50,7 @@ public abstract class Piece {
 	 * @param checkCheck if true the method check if the king is in check if false method does not check if king is in check
 	 * @return Bolean if the path is valid return true else false
 	 */
-	public abstract Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, boolean checkCheck, Piece startPiece, Piece endPiece);
+	public abstract Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, boolean checkCheck, Piece startPiece, Piece endPiece, Player playerTurn);
 
 
 	/**
@@ -91,7 +88,7 @@ public abstract class Piece {
 	 * @param isValidMoveBool
 	 * @return
 	 */
-	public boolean checkIfMoveOutOfCheck(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, boolean checkCheck, Piece startPiece, Piece endPiece, boolean kingIsInCheck, boolean isValidMoveBool) {
+	public boolean checkIfMoveOutOfCheck(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, boolean checkCheck, Piece startPiece, Piece endPiece, boolean kingIsInCheck, boolean isValidMoveBool, Player playerTurn) {
 		// When the move is valid
 		if(isValidMoveBool) {
 
@@ -105,7 +102,7 @@ public abstract class Piece {
 					board[int_y][int_x] = new Cell(int_y, int_x, board[curr_y][curr_x].getPiece());
 					board[curr_y][curr_x] = new Cell(curr_y, curr_x, null);
 
-					boolean[] checkKing = Misc.checkCheck(board);
+					boolean[] checkKing = Misc.checkCheck(board, playerTurn);
 					if (checkKing[0] || checkKing[1] ) {
 						System.out.println("Move doesnt bring king out of check");
 

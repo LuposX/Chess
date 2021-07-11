@@ -2,6 +2,7 @@ package pieces;
 
 import logic.Cell;
 import logic.Misc;
+import logic.Player;
 
 public class King extends Piece{
 
@@ -11,7 +12,7 @@ public class King extends Piece{
 	}
 
 	@Override
-	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, boolean checkCheck, Piece startPiece, Piece endPiece) {
+	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, boolean checkCheck, Piece startPiece, Piece endPiece, Player playerTurn) {
 
 		// Pieces of same color cant capture each other
 		if(checkCaptureOwnPiece(curr_x, curr_y, int_x, int_y, board)) {
@@ -20,7 +21,7 @@ public class King extends Piece{
 
 		// Check if King is in check and in checkMate
 		if(checkCheck) {
-			this.kingIsInCheck = Misc.getCheckCheck(curr_x, curr_y, int_x, int_y, board, startPiece, endPiece);
+			this.kingIsInCheck = Misc.getCheckCheck(curr_x, curr_y, int_x, int_y, board, startPiece, endPiece, playerTurn);
 		}
 
 		if (curr_x + 1 == int_x || curr_x - 1 == int_x) {
@@ -32,7 +33,7 @@ public class King extends Piece{
 		} else {
 			this.isValidMoveBool = false;
 		}
-		return checkIfMoveOutOfCheck(curr_x, curr_y, int_x, int_y, board, checkCheck, startPiece, endPiece, kingIsInCheck, isValidMoveBool);
+		return checkIfMoveOutOfCheck(curr_x, curr_y, int_x, int_y, board, checkCheck, startPiece, endPiece, kingIsInCheck, isValidMoveBool, playerTurn);
 	}
 
 }

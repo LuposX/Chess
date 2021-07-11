@@ -2,6 +2,7 @@ package pieces;
 
 import logic.Cell;
 import logic.Misc;
+import logic.Player;
 
 public class Bishop extends Piece{
 
@@ -11,7 +12,7 @@ public class Bishop extends Piece{
 	}
 
 	@Override
-	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, boolean checkCheck, Piece startPiece, Piece endPiece) {
+	public Boolean isValidPath(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, boolean checkCheck, Piece startPiece, Piece endPiece, Player playerTurn) {
 
 		// Calculate difference between start and end position
 		int differenceX = Math.abs(curr_x - int_x);
@@ -19,7 +20,7 @@ public class Bishop extends Piece{
 
 		// Check if King is in check and in checkMate
 		if(checkCheck) {
-			this.kingIsInCheck = Misc.getCheckCheck(curr_x, curr_y, int_x, int_y, board, startPiece, endPiece);
+			this.kingIsInCheck = Misc.getCheckCheck(curr_x, curr_y, int_x, int_y, board, startPiece, endPiece, playerTurn);
 		}
 
 		// Pieces of same color cant capture each other
@@ -82,6 +83,6 @@ public class Bishop extends Piece{
 		} else {
 			this.isValidMoveBool = false;
 		}
-		return checkIfMoveOutOfCheck(curr_x, curr_y, int_x, int_y, board, checkCheck, startPiece, endPiece, this.kingIsInCheck, this.isValidMoveBool);
+		return checkIfMoveOutOfCheck(curr_x, curr_y, int_x, int_y, board, checkCheck, startPiece, endPiece, this.kingIsInCheck, this.isValidMoveBool, playerTurn);
 	}
 }

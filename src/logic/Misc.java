@@ -21,7 +21,7 @@ public class Misc {
 	 * @param board the chessboard
 	 * @return returns true when there is a chckMate on the board
 	 */
-	public static boolean checkCheckMate(Cell[][] board)  {
+	public static boolean checkCheckMate(Cell[][] board, Player playerTurn)  {
 		// in here we write the position of the kings
 		Point whiteKingsPos = new Point();
 		Point blackKingsPos = new Point();
@@ -102,21 +102,21 @@ public class Misc {
 							Piece endPiece = board[movesWhereKingCouldMoveToB.get(k).getPoint().y][movesWhereKingCouldMoveToB.get(k).getPoint().x].getPiece(); // The Piece where we end up
 
 							// only if we have a enemy piece do we check if it can reach the new king position
-							if(!startPiece.getIsWhite()) {
+							if(startPiece.getIsWhite()) {
 
 								// update the board temporarily with the king movement
 								board[blackKingsPos.y][blackKingsPos.x] = new Cell(blackKingsPos.y, blackKingsPos.x, null);
-								board[movesWhereKingCouldMoveToW.get(k).getPoint().y][movesWhereKingCouldMoveToW.get(k).getPoint().x] = new Cell(movesWhereKingCouldMoveToW.get(k).getPoint().y, movesWhereKingCouldMoveToW.get(k).getPoint().x, new King(false));
+								board[movesWhereKingCouldMoveToB.get(k).getPoint().y][movesWhereKingCouldMoveToB.get(k).getPoint().x] = new Cell(movesWhereKingCouldMoveToB.get(k).getPoint().y, movesWhereKingCouldMoveToB.get(k).getPoint().x, new King(false));
 
 								// Check if valid
-								freeSpot = board[i][j].getPiece().isValidPath(board[i][j].getX(), board[i][j].getY(), movesWhereKingCouldMoveToW.get(k).getPoint().x, movesWhereKingCouldMoveToW.get(k).getPoint().y, board, false, startPiece, endPiece);
+								freeSpot = board[i][j].getPiece().isValidPath(board[i][j].getX(), board[i][j].getY(), movesWhereKingCouldMoveToB.get(k).getPoint().x, movesWhereKingCouldMoveToB.get(k).getPoint().y, board, false, startPiece, endPiece, playerTurn);
 
 								// reset board from king movement
 								board[blackKingsPos.y][blackKingsPos.x] = new Cell(blackKingsPos.y, blackKingsPos.x, new King(false));
-								board[movesWhereKingCouldMoveToW.get(k).getPoint().y][movesWhereKingCouldMoveToW.get(k).getPoint().x] = new Cell(movesWhereKingCouldMoveToW.get(k).getPoint().y, movesWhereKingCouldMoveToW.get(k).getPoint().x, null);
+								board[movesWhereKingCouldMoveToB.get(k).getPoint().y][movesWhereKingCouldMoveToB.get(k).getPoint().x] = new Cell(movesWhereKingCouldMoveToB.get(k).getPoint().y, movesWhereKingCouldMoveToB.get(k).getPoint().x, null);
 
-								if(!movesWhereKingCouldMoveToW.get(k).getIsPointCovered()) {
-									movesWhereKingCouldMoveToW.get(k).setPointCovered(freeSpot);
+								if(!movesWhereKingCouldMoveToB.get(k).getIsPointCovered()) {
+									movesWhereKingCouldMoveToB.get(k).setPointCovered(freeSpot);
 								}
 							}
 
@@ -191,7 +191,7 @@ public class Misc {
 									board[movesWhereKingCouldMoveToW.get(k).getPoint().y][movesWhereKingCouldMoveToW.get(k).getPoint().x] = new Cell(movesWhereKingCouldMoveToW.get(k).getPoint().y, movesWhereKingCouldMoveToW.get(k).getPoint().x, new King(true));
 
 									// Check if valid
-									freeSpot = board[i][j].getPiece().isValidPath(board[i][j].getX(), board[i][j].getY(), movesWhereKingCouldMoveToW.get(k).getPoint().x, movesWhereKingCouldMoveToW.get(k).getPoint().y, board, false, startPiece, endPiece);
+									freeSpot = board[i][j].getPiece().isValidPath(board[i][j].getX(), board[i][j].getY(), movesWhereKingCouldMoveToW.get(k).getPoint().x, movesWhereKingCouldMoveToW.get(k).getPoint().y, board, false, startPiece, endPiece, playerTurn);
 
 									// reset board from king movement
 									board[whiteKingsPos.y][whiteKingsPos.x] = new Cell(whiteKingsPos.y, whiteKingsPos.x, new King(true));
@@ -222,7 +222,7 @@ public class Misc {
 	 * Checks if the King is in Check
 	 * @return boolean[] first entry is for white king, second entry is for black king
 	 */
-	public static boolean[] checkCheck(Cell[][] board) {
+	public static boolean[] checkCheck(Cell[][] board, Player playerTurn) {
 		// in here we write the position of the kings
 		Point whiteKingsPos = new Point();
 		Point blackKingsPos = new Point();
@@ -263,7 +263,7 @@ public class Misc {
 						Piece startPiece = board[i][j].getPiece(); // The Piece from where we start
 						Piece endPiece = board[whiteKingsPos.y][whiteKingsPos.x].getPiece(); // The Piece where we end up
 
-						kingInCheck[0] = board[i][j].getPiece().isValidPath(board[i][j].getX(), board[i][j].getY(), whiteKingsPos.x, whiteKingsPos.y, board, false, startPiece, endPiece);
+						kingInCheck[0] = board[i][j].getPiece().isValidPath(board[i][j].getX(), board[i][j].getY(), whiteKingsPos.x, whiteKingsPos.y, board, false, startPiece, endPiece, playerTurn);
 
 						if (kingInCheck[0]) {
 							break outerloop;
@@ -275,7 +275,7 @@ public class Misc {
 
 		// Check if any piece can move to the black king field
 		if(blackKingFound) {
-			outerloop:
+			outerloop2:
 			for (int i = 0; i < board.length; i++) {
 				for (int j = 0; j < board[i].length; j++) {
 
@@ -284,10 +284,10 @@ public class Misc {
 						Piece startPiece = board[i][j].getPiece(); // The Piece from where we start
 						Piece endPiece = board[blackKingsPos.y][blackKingsPos.x].getPiece(); // The Piece where we end up
 
-						kingInCheck[1] = board[i][j].getPiece().isValidPath(board[i][j].getX(), board[i][j].getY(), blackKingsPos.x, blackKingsPos.y, board, false, startPiece, endPiece);
+						kingInCheck[1] = board[i][j].getPiece().isValidPath(board[i][j].getX(), board[i][j].getY(), blackKingsPos.x, blackKingsPos.y, board, false, startPiece, endPiece, playerTurn);
 
 						if (kingInCheck[1]) {
-							break outerloop;
+							break outerloop2;
 						}
 					}
 				}
@@ -303,22 +303,27 @@ public class Misc {
 	 * @param board the chess board
 	 * @return
 	 */
-	public static Boolean getCheckCheck(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, Piece startPiece, Piece endPiece) {
+	public static Boolean getCheckCheck(int curr_x, int curr_y, int int_x, int int_y, Cell[][] board, Piece startPiece, Piece endPiece, Player playerTurn) {
 
 		// tmp change the board to the intended move
 		board[int_y][int_x] = new Cell(int_y, int_x, board[curr_y][curr_x].getPiece());
 		board[curr_y][curr_x] = new Cell(curr_y, curr_x, null);
 
 		// Check if King is in check
-		boolean[] checkKing = Misc.checkCheck(board);
+		boolean[] checkKing = Misc.checkCheck(board, playerTurn);
 
 		// tmp change the board back to the original
 		board[curr_y][curr_x] = new Cell(curr_y, curr_x, board[int_y][int_x].getPiece());
 		board[int_y][int_x] = new Cell(int_y, int_x,null);
 
-		if (checkKing[0] || checkKing[1] ) {
-			System.out.println("King is in check");
+		if (playerTurn.getIsWhiteSide() == checkKing[0]) {
+			System.out.println("White King is in check");
 			return true;
+
+		} else if(playerTurn.getIsWhiteSide() != checkKing[1]) {
+			System.out.println("Black King is in check");
+			return true;
+
 		} else {
 			return  false;
 		}
@@ -329,9 +334,9 @@ public class Misc {
 	 * @param board the chess board
 	 * @return
 	 */
-	public static Boolean getCheckCheck(Cell[][] board) {
+	public static Boolean getCheckCheck(Cell[][] board, Player playerTurn) {
 		// Check if King is in check
-		boolean[] checkKing = Misc.checkCheck(board);
+		boolean[] checkKing = Misc.checkCheck(board, playerTurn);
 		if (checkKing[0] || checkKing[1] ) {
 			System.out.println("King is in check");
 			return true;

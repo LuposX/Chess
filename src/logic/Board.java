@@ -96,12 +96,8 @@ public class Board {
 	
 	/**
 	 * Draws a Chess Board.
-	 * @param r1 red part of rgba of chess color 1
-	 * @param g1 green part of rgba of chess color 1
-	 * @param b1 blue part of rgba of chess color 1
-	 * @param r2 red part of rgba of chess color 2
-	 * @param g2 green part of rgba of chess color 2
-	 * @param b2 blue part of rgba of chess color 2
+	 * @param c1 color 1
+	 * @param c2 color 2
 	 */
 	public void drawChessBoard(Graphics g, Color c1, Color c2){
 		for (int a = 0; a < this.boardSizeY; a++) {

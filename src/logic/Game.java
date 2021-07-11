@@ -63,7 +63,12 @@ public class Game {
 
 	public void setUseTestBoard(boolean useTestBoard) {
 		this.useTestBoard = useTestBoard;
-		this.board.testBoard();
+
+		if(useTestBoard) {
+			this.board.testBoard();
+		} else {
+			this.board.resetBoard();
+		}
 	}
 
 	public void newGame() {
@@ -98,9 +103,9 @@ public class Game {
 		this.board.drawPieces(g);
 
 		if(this.inCheckMate) {
-			g.setColor(Color.red);
-			g.setFont(new Font("TimesRoman", Font.BOLD, 40));
-			g.drawString("CHECKMATE", 200, 200);
+			g.setColor(Color.BLUE);
+			g.setFont(new Font("TimesRoman", Font.BOLD, 60));
+			g.drawString("CHECKMATE", 150, 200);
 		}
 	}
 	

@@ -19,23 +19,28 @@ public class InfoPanel extends JPanel implements ActionListener, ItemListener {
 	private GUI gui;
 	private Choice choiceColor;
 	private Choice choiceScenario;
+	private JLabel labelScenario;
+	private JLabel labelColor;
 
 	public InfoPanel(GUI gui) {
 		this.gui = gui;
-		setLayout(new GridLayout(4, 1));
+
+		GridLayout gridlayout = new GridLayout(6, 1);
+		gridlayout.setHgap(200);
+		setLayout(gridlayout);
 		setBorder(BorderFactory.createLineBorder(Color.black));
-		setMaximumSize(new Dimension(400, 400));
+		//setMaximumSize(new Dimension(400, 400));
 		
 		this.newGame = new JButton("New Game");
 		this.newGame.addActionListener(this);
-		this.newGame.setPreferredSize(new Dimension(200, 80));
+		//this.newGame.setPreferredSize(new Dimension(200, 80));
 		this.newGame.setFont(new Font("Calibri", Font.BOLD, 20));
 
 		this.playerTurnLabel = new JLabel("It's White turn.");
 		this.playerTurnLabel.setFont(new Font("Calibri", Font.BOLD, 30));
 
 		this.choiceColor = new Choice();
-		this.choiceColor.setPreferredSize(new Dimension(200, 100));
+		//this.choiceColor.setPreferredSize(new Dimension(200, 100));
 		this.choiceColor.add("Default");
 		this.choiceColor.add("Green");
 		this.choiceColor.add("Dark Wood");
@@ -49,7 +54,15 @@ public class InfoPanel extends JPanel implements ActionListener, ItemListener {
 		this.choiceScenario.add("2 Rooks and 1 King");
 		this.choiceScenario.addItemListener(this);
 
+		this.labelScenario = new JLabel("Different Chess Scenarios: ");
+		this.labelScenario.setFont(new Font("Calibri", Font.BOLD, 20));
+
+		this.labelColor = new JLabel("Different Color Schemes: ");
+		this.labelColor.setFont(new Font("Calibri", Font.BOLD, 20));
+
+		add(this.labelScenario);
 		add(this.choiceScenario);
+		add(this.labelColor);
 		add(this.choiceColor);
 		add(this.newGame);
 		add(this.playerTurnLabel);

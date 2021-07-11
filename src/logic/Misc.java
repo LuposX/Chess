@@ -229,6 +229,10 @@ public class Misc {
 
 		boolean[] kingInCheck = new boolean[2];
 
+		// if the king got found on theb oard
+		boolean blackKingFound = false;
+		boolean whiteKingFound = false;
+
 		// Get position of King
 		for(int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
@@ -239,46 +243,52 @@ public class Misc {
 					// Check which color the king piece has
 					if(board[i][j].getPiece().getIsWhite()) {
 						whiteKingsPos = new Point(board[i][j].getX(), board[i][j].getY());
+						whiteKingFound = true;
 					} else {
 						blackKingsPos = new Point(board[i][j].getX(), board[i][j].getY());
+						blackKingFound = true;
 					}
 				}
 			}
 		}
 
 		// Check if any piece can move to the white king field
-		outerloop:
-		for(int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
+		if(whiteKingFound) {
+			outerloop:
+			for (int i = 0; i < board.length; i++) {
+				for (int j = 0; j < board[i].length; j++) {
 
-				if (board[i][j].getPiece() != null) {
+					if (board[i][j].getPiece() != null) {
 
-					Piece startPiece = board[i][j].getPiece(); // The Piece from where we start
-					Piece endPiece = board[whiteKingsPos.y][whiteKingsPos.x].getPiece(); // The Piece where we end up
+						Piece startPiece = board[i][j].getPiece(); // The Piece from where we start
+						Piece endPiece = board[whiteKingsPos.y][whiteKingsPos.x].getPiece(); // The Piece where we end up
 
-					kingInCheck[0] = board[i][j].getPiece().isValidPath(board[i][j].getX(), board[i][j].getY(), whiteKingsPos.x, whiteKingsPos.y, board, false, startPiece, endPiece);
+						kingInCheck[0] = board[i][j].getPiece().isValidPath(board[i][j].getX(), board[i][j].getY(), whiteKingsPos.x, whiteKingsPos.y, board, false, startPiece, endPiece);
 
-					if (kingInCheck[0]) {
-						break outerloop;
+						if (kingInCheck[0]) {
+							break outerloop;
+						}
 					}
 				}
 			}
 		}
 
 		// Check if any piece can move to the black king field
-		outerloop:
-		for(int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
+		if(blackKingFound) {
+			outerloop:
+			for (int i = 0; i < board.length; i++) {
+				for (int j = 0; j < board[i].length; j++) {
 
-				if (board[i][j].getPiece() != null) {
+					if (board[i][j].getPiece() != null) {
 
-					Piece startPiece = board[i][j].getPiece(); // The Piece from where we start
-					Piece endPiece = board[blackKingsPos.y][blackKingsPos.x].getPiece(); // The Piece where we end up
+						Piece startPiece = board[i][j].getPiece(); // The Piece from where we start
+						Piece endPiece = board[blackKingsPos.y][blackKingsPos.x].getPiece(); // The Piece where we end up
 
-					kingInCheck[1] = board[i][j].getPiece().isValidPath(board[i][j].getX(), board[i][j].getY(), blackKingsPos.x, blackKingsPos.y, board, false, startPiece, endPiece);
+						kingInCheck[1] = board[i][j].getPiece().isValidPath(board[i][j].getX(), board[i][j].getY(), blackKingsPos.x, blackKingsPos.y, board, false, startPiece, endPiece);
 
-					if (kingInCheck[1]) {
-						break outerloop;
+						if (kingInCheck[1]) {
+							break outerloop;
+						}
 					}
 				}
 			}

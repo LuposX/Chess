@@ -128,8 +128,8 @@ public class Board {
 		boardArray[4][3] = new Cell(4, 3, new Pawn(true));
 		boardArray[7][4] = new Cell(7, 4, new King(true));
 
-		boardArray[4][7] = new Cell(4, 7, new Rook(false));
-		boardArray[5][6] = new Cell(5, 6, new Rook(false));
+		boardArray[4][7] = new Cell(4, 7, new Queen(false));
+		boardArray[5][6] = new Cell(5, 6, new Queen(false));
 	}
 
 

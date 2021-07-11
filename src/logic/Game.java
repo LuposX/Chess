@@ -141,10 +141,10 @@ public class Game {
 
 							if (this.playerTurn == player1) {
 								this.playerTurn = player2;
-								this.gui.getInfoPanel().setPlayerTurnText("It's Player 2 turn.");
+								this.gui.getInfoPanel().setPlayerTurnText("It's Black turn.");
 							} else {
 								this.playerTurn = player1;
-								this.gui.getInfoPanel().setPlayerTurnText("It's Player 1 turn.");
+								this.gui.getInfoPanel().setPlayerTurnText("It's White turn.");
 							}
 
 						} else {
@@ -188,10 +188,10 @@ public class Game {
 
 								if (this.playerTurn == player1) {
 									this.playerTurn = player2;
-									this.gui.getInfoPanel().setPlayerTurnText("It's Player 2 turn.");
+									this.gui.getInfoPanel().setPlayerTurnText("It's Black turn.");
 								} else {
 									this.playerTurn = player1;
-									this.gui.getInfoPanel().setPlayerTurnText("It's Player 1 turn.");
+									this.gui.getInfoPanel().setPlayerTurnText("It's White turn.");
 								}
 
 							} else {
@@ -219,10 +219,10 @@ public class Game {
 
 							if (this.playerTurn == player1) {
 								this.playerTurn = player2;
-								this.gui.getInfoPanel().setPlayerTurnText("It's Player 2 turn.");
+								this.gui.getInfoPanel().setPlayerTurnText("It's Black turn.");
 							} else {
 								this.playerTurn = player1;
-								this.gui.getInfoPanel().setPlayerTurnText("It's Player 1 turn.");
+								this.gui.getInfoPanel().setPlayerTurnText("It's White turn.");
 							}
 
 						}

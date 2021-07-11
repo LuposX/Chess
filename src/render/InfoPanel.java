@@ -31,7 +31,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		this.newGame.setPreferredSize(new Dimension(200, 80));
 		this.newGame.setFont(new Font("Calibri", Font.BOLD, 20));
 
-		this.playerTurnLabel = new JLabel("It's Player 1 turn.");
+		this.playerTurnLabel = new JLabel("It's White turn.");
 		this.playerTurnLabel.setFont(new Font("Calibri", Font.BOLD, 30));
 		
 		add(this.newGame);

@@ -17,14 +17,16 @@ public class Rook extends Piece{
 			return false;
 		}
 
-		// Check if King is in check
+		// Check if King is in check and in checkMate
 		if(checkCheck) {
-			boolean[] checkKing = checkCheck(board);
-			if (checkKing[0] || checkKing[1] ) {
-				System.out.println("King is in check");
-				kingIsInCheck = true;
-			} else {
-				this.kingIsInCheck = false;
+			this.kingIsInCheck = super.getCheckCheck(board);
+
+			// Check if in Checkmate
+			if(this.kingIsInCheck) {
+				if(super.checkCheckMate(board)) {
+					System.out.println("In Checkmate");
+					return false;
+				}
 			}
 		}
 

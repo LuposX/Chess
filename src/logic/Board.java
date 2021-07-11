@@ -125,11 +125,11 @@ public class Board {
 			}
 		}
 
-		boardArray[6][3] = new Cell(6, 3, new Pawn(true));
-		boardArray[6][4] = new Cell(6, 4, new King(true));
+		boardArray[4][3] = new Cell(4, 3, new Pawn(true));
+		boardArray[7][4] = new Cell(7, 4, new King(true));
 
-		boardArray[2][0] = new Cell(2, 0, new Bishop(false));
-		boardArray[2][4] = new Cell(2, 4, new Rook(false));
+		boardArray[4][7] = new Cell(4, 7, new Queen(false));
+		boardArray[5][7] = new Cell(5, 7, new Queen(false));
 	}
 
 	/*

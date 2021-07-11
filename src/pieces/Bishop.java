@@ -1,6 +1,5 @@
 package pieces;
 
-import logic.Board;
 import logic.Cell;
 
 public class Bishop extends Piece{
@@ -17,14 +16,16 @@ public class Bishop extends Piece{
 		int differenceX = Math.abs(curr_x - int_x);
 		int differenceY = Math.abs(curr_y - int_y);
 
-		// Check if King is in check
+		// Check if King is in check and in checkMate
 		if(checkCheck) {
-			boolean[] checkKing = checkCheck(board);
-			if (checkKing[0] || checkKing[1] ) {
-				System.out.println("King is in check");
-				this.kingIsInCheck = true;
-			} else {
-				this.kingIsInCheck = false;
+			this.kingIsInCheck = super.getCheckCheck(board);
+
+			// Check if in Checkmate
+			if(this.kingIsInCheck) {
+				if(super.checkCheckMate(board)) {
+					System.out.println("In Checkmate");
+					return false;
+				}
 			}
 		}
 

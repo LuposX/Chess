@@ -1,6 +1,7 @@
 package pieces;
 
 import logic.Cell;
+import logic.Misc;
 
 public class Pawn extends Piece {
 	private Boolean firstMove = true;
@@ -21,15 +22,7 @@ public class Pawn extends Piece {
 
 		// Check if King is in check and in checkMate
 		if(checkCheck) {
-			this.kingIsInCheck = super.getCheckCheck(board);
-
-			// Check if in Checkmate
-			if(this.kingIsInCheck) {
-				if(super.checkCheckMate(board)) {
-					System.out.println("In Checkmate");
-					return false;
-				}
-			}
+			this.kingIsInCheck = Misc.getCheckCheck(board);
 		}
 
 		// We do -2 because y-axis starts at the top and goes down

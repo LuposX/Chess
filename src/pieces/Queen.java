@@ -1,6 +1,7 @@
 package pieces;
 
 import logic.Cell;
+import logic.Misc;
 
 public class Queen extends Piece{
 
@@ -19,15 +20,7 @@ public class Queen extends Piece{
 
 		// Check if King is in check and in checkMate
 		if(checkCheck) {
-			this.kingIsInCheck = super.getCheckCheck(board);
-
-			// Check if in Checkmate
-			if(this.kingIsInCheck) {
-				if(super.checkCheckMate(board)) {
-					System.out.println("In Checkmate");
-					return false;
-				}
-			}
+			this.kingIsInCheck = Misc.getCheckCheck(board);
 		}
 		
 		// Calculate difference between start and end position

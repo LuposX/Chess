@@ -1,7 +1,6 @@
 package logic;
 
-import java.awt.Graphics;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
@@ -29,7 +28,8 @@ public class Game {
 	private GUI gui;
 	private boolean turnOnConsoleBoard;
 	private boolean useTestBoard;
-	
+	private boolean inCheckMate;
+
 	public Game(int boardSizeX, int boardSizeY, int tileSize, GUI gui, boolean turnOnConsoleBoard, boolean useTestBoard) {
 		this.boardSizeX = boardSizeX;
 		this.boardSizeY = boardSizeY;
@@ -38,6 +38,7 @@ public class Game {
 		this.gui = gui;
 		this.turnOnConsoleBoard = turnOnConsoleBoard;
 		this.useTestBoard = useTestBoard;
+		this.inCheckMate = false;
 
 		this.board = new Board(boardSizeX, boardSizeY, tileSize, useTestBoard);
 		this.player1 = new Player(true);
@@ -59,6 +60,7 @@ public class Game {
 			this.playerTurn = this.player2;
 		}
 
+		this.inCheckMate = false;
 		this.historyMoves.clear();
 
 		if (this.useTestBoard) {
@@ -78,6 +80,12 @@ public class Game {
 	public void render(Graphics g) {
 		this.board.drawChessBoard(g);
 		this.board.drawPieces(g);
+
+		if(this.inCheckMate) {
+			g.setColor(Color.red);
+			g.setFont(new Font("TimesRoman", Font.BOLD, 40));
+			g.drawString("CHECKMATE", 200, 200);
+		}
 	}
 	
 	 /*
@@ -147,6 +155,15 @@ public class Game {
 								this.gui.getInfoPanel().setPlayerTurnText("It's White turn.");
 							}
 
+							// Check if in Checkmate
+							boolean kingIsInCheck = Misc.getCheckCheck(board.getBoardArray());
+							if(kingIsInCheck) {
+								if(Misc.checkCheckMate(board.getBoardArray())) {
+									System.out.println("In Checkmate");
+									this.inCheckMate = true;
+								}
+							}
+
 						} else {
 							this.firstClickPerMoveTry = true;
 							System.out.println("IsValidMove: False, wrong color piece");
@@ -194,6 +211,17 @@ public class Game {
 									this.gui.getInfoPanel().setPlayerTurnText("It's White turn.");
 								}
 
+								// Check if in Checkmate
+								boolean kingIsInCheck = Misc.getCheckCheck(board.getBoardArray());
+								if(kingIsInCheck) {
+									if(Misc.checkCheckMate(board.getBoardArray())) {
+										System.out.println("In Checkmate");
+										this.inCheckMate = true;
+									}
+								}
+
+
+
 							} else {
 								this.firstClickPerMoveTry = true;
 								System.out.println("IsValidMove: False, Pawns cant capture straight");
@@ -216,13 +244,22 @@ public class Game {
 								ASCIChess.drawConsoleChess(board.getBoardArray());  // draws the board in the console
 							}
 
-
+							// update the text in the infopanel
 							if (this.playerTurn == player1) {
 								this.playerTurn = player2;
 								this.gui.getInfoPanel().setPlayerTurnText("It's Black turn.");
 							} else {
 								this.playerTurn = player1;
 								this.gui.getInfoPanel().setPlayerTurnText("It's White turn.");
+							}
+
+							// Check if in Checkmate
+							boolean kingIsInCheck = Misc.getCheckCheck(board.getBoardArray());
+							if(kingIsInCheck) {
+								if(Misc.checkCheckMate(board.getBoardArray())) {
+									System.out.println("In Checkmate");
+									this.inCheckMate = true;
+								}
 							}
 
 						}

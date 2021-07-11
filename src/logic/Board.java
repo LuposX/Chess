@@ -1,12 +1,12 @@
 package logic;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 import pieces.*;
 
@@ -128,9 +128,10 @@ public class Board {
 		boardArray[4][3] = new Cell(4, 3, new Pawn(true));
 		boardArray[7][4] = new Cell(7, 4, new King(true));
 
-		boardArray[4][7] = new Cell(4, 7, new Queen(false));
-		boardArray[5][7] = new Cell(5, 7, new Queen(false));
+		boardArray[4][7] = new Cell(4, 7, new Rook(false));
+		boardArray[5][6] = new Cell(5, 6, new Rook(false));
 	}
+
 
 	/*
 	 * Resets the logic Chess Board to default setting.

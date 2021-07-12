@@ -4,7 +4,7 @@ import pieces.Piece;
 
 import java.io.*;
 
-public class Cell implements Serializable {
+public class Cell {
 	private Piece piece;
 	private int Y;
 	private int X;
